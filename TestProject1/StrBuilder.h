@@ -58,7 +58,8 @@ public:
         	for (const auto& str : m_vStrings) //K.Eremeev: add const reference to prevnt extra copy
 		{
 			// printf("Adding string: " + str);
-			s = s + str;
+			//s = s + str; //K.Eremeev to remove (updated later )
+			s.append(str);
 		}
 		return s;
 	}

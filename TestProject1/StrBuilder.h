@@ -10,14 +10,14 @@ using v_strings = std::vector<std::string>; //K.Eremeev: just more modern
 class CStringBuilder
 {
 public:
-	CStringBuilder() {}
-    virtual ~CStringBuilder() = default; //K.Eremeev: was missed
+    	CStringBuilder() {}
+    	virtual ~CStringBuilder() = default; //K.Eremeev: was missed
 
-    CStringBuilder(const CStringBuilder&) = delete; //K.Eremeev: was missed
-    CStringBuilder(CStringBuilder&&) noexcept = delete; //K.Eremeev: was missed
+    	CStringBuilder(const CStringBuilder&) = delete; //K.Eremeev: was missed
+    	CStringBuilder(CStringBuilder&&) noexcept = delete; //K.Eremeev: was missed
         
-    CStringBuilder& operator=(const CStringBuilder& stream) = delete; //K.Eremeev: was missed
-    CStringBuilder& operator=(CStringBuilder&&) noexcept = delete; //K.Eremeev: was missed
+    	CStringBuilder& operator=(const CStringBuilder& stream) = delete; //K.Eremeev: was missed
+    	CStringBuilder& operator=(CStringBuilder&&) noexcept = delete; //K.Eremeev: was missed
 
 	////////////////////////////////////////////////////////////////////////////////
 	// generate nStrCount test strings in vector m_vStrings
@@ -39,11 +39,11 @@ public:
 			// s.erase(); //K.Eremeev: to remove
 			// s.append(nStrLength, 'a'); //K.Eremeev: to remove
 			// m_vStrings.push_back(s); //K.Eremeev: to remove
-            const auto& res {
-                m_vStrings.emplace_back(std::string (nStrLength, 'a')) //K.Eremeev: more optimized variant
-            };
+            		const auto& res {
+                		m_vStrings.emplace_back(std::string (nStrLength, 'a')) //K.Eremeev: more optimized variant
+            		};
  
-            m_allMemSize += res.size();
+            		m_allMemSize += res.size();
 		}
 	}
 
@@ -52,10 +52,10 @@ public:
 	std::string GetData() const // K.Eremeev: removed extra 'CStringBuilder::' in declaretion/definition (clang warn)
 	{
 		std::string s;
-        s.reserve(m_allMemSize); //K.Eremeev: for prevent reallocation in below cycle 
+        	s.reserve(m_allMemSize); //K.Eremeev: for prevent reallocation in below cycle 
                                  // and prevent allocation big memory by standart allocator
 
-        for (const auto& str : m_vStrings) //K.Eremeev: add const reference to prevnt extra copy
+        	for (const auto& str : m_vStrings) //K.Eremeev: add const reference to prevnt extra copy
 		{
 			// printf("Adding string: " + str);
 			s = s + str;
@@ -64,7 +64,7 @@ public:
 	}
 
 private:
-	v_strings m_vStrings;
+    v_strings m_vStrings;
     size_t m_allMemSize {0}; //K.Eremeev: add for keep size of all allocated data in 'm_vStrings'
 };
 

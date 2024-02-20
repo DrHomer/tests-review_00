@@ -13,20 +13,34 @@ using namespace std;
   correct the potential issues.
 */
 class MyFileData {
+    	static const size_t _dataSize {10}; //K.Eremeev: move size array to member
 	char* myText;
-
 
 public:
 	MyFileData() {
-		myText = new char[10];
+		myText = new char[_dataSize];
 	}
 
-	~MyFileData() {
-		if(myText)
+	virtual ~MyFileData() { //K.Eremeev: add missed 'virtual'
+		if(myText) {
 			delete [] myText;
+            		myText = nullptr; //K.Eremeev: sure pointer set to null
+        	}
 	}
 
-	void copy(MyFileData& a, MyFileData b) {
+    	MyFileData(const MyFileData& data) { //K.Eremeev: was missed
+        	myText = new char[_dataSize];
+        	memcpy(myText, data.myText, _dataSize);
+    	};
+    	MyFileData(MyFileData&& data) noexcept = delete; //K.Eremeev: was missed
+        
+    	MyFileData& operator=(const MyFileData& data) { //K.Eremeev: was missed
+        	memcpy(myText, data.myText, _dataSize);
+        	return *this;
+    	};
+    	MyFileData& operator=(MyFileData&& data) noexcept = delete; //K.Eremeev: was missed
+
+	void copy(MyFileData& a, MyFileData b) { 
 		a = b;
 		MyFileData c = a;
 	}
@@ -35,15 +49,17 @@ public:
 int main(int argc, char* argv[])
 {
 	printf("String Builder test...\n");
+    	time_t nStartTime = time(NULL); //K.Eremeev: moved to obtain all cases
+
 	CStringBuilder StringBuilder;
 	// generating test data
-	StringBuilder.GenerateTestData(10000);
-	time_t nStartTime = time(NULL);
+	StringBuilder.GenerateTestData(1'000'000); //K.Eremeev: increase elemetns
 
 	// get data
 	string sData = StringBuilder.GetData();
 
-	printf("Data created in %f secs\n", difftime(time(NULL), nStartTime));
+    	const double& timePass { difftime(time(NULL), nStartTime) };
+	printf("Data created in %.6f secs\n",  timePass);
 
 	MyFileData data;
 	MyFileData dataCopy = data;
